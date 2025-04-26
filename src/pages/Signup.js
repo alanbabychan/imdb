@@ -20,7 +20,7 @@ function Signup() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="form">
       <h2>Signup</h2>
       <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
       <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
