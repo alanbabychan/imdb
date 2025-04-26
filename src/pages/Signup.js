@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Signup() {
   const [username, setUsername] = useState('');
@@ -9,8 +10,13 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/api/auth/signup', { username, password });
-    navigate('/login');
+    try {
+      await axios.post('http://localhost:5000/api/auth/signup', { username, password });
+      toast.success("Signup Successful!");
+      navigate('/login');
+    } catch (err) {
+      toast.error("Signup Failed!");
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -9,9 +10,15 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-    if (response.data.message === "Login successful") {
-      navigate('/dashboard');
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      if (response.data.message === "Login successful") {
+        localStorage.setItem('isLoggedIn', 'true'); // Save login status
+        toast.success("Login Successful!");
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      toast.error("Login Failed!");
     }
   };
 
