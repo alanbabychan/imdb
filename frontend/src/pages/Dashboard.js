@@ -1,51 +1,77 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
-function Dashboard() {
-  const [genre, setGenre] = useState('');
-  const [movies, setMovies] = useState([]);
+// Sample movie data with 30 movies
+const movies = Array(30).fill(null).map((_, index) => ({
+  name: `Movie ${index + 1}`,
+  imdbRating: (8 + (index % 5) * 0.1).toFixed(1),
+  trailerUrl: `https://www.youtube.com/embed/EXeTwQWrcwY`,
+  description: `This is a description of Movie ${index + 1}.`,
+  characters: [`Character 1`, `Character 2`, `Character 3`],
+  image: `https://placekitten.com/200/300?image=${index + 1}`
+}));
+
+const Dashboard = () => {
+  const [selectedMovie, setSelectedMovie] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
-      navigate('/login');
-    }
-  }, [navigate]);
+  const handleMovieClick = (movie) => {
+    setSelectedMovie(movie);
+  };
 
-  const fetchMovies = async (selectedGenre, sort = false) => {
-    let url = `http://localhost:5000/api/movies?genre=${selectedGenre}`;
-    if (sort) {
-      url += '&sort=rating';
-    }
-    const response = await axios.get(url);
-    setMovies(response.data);
+  const closeModal = () => {
+    setSelectedMovie(null);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    // Example logout logic (redirect to login)
     navigate('/login');
   };
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
-      <button onClick={() => { setGenre('Romance'); fetchMovies('Romance'); }}>Romance</button>
-      <button onClick={() => { setGenre('Comedy'); fetchMovies('Comedy'); }}>Comedy</button>
-      <button onClick={() => { setGenre('Action'); fetchMovies('Action'); }}>Action</button>
+      <h2 className="title">Movies Dashboard</h2>
 
-      <button onClick={() => fetchMovies(genre, true)}>Sort by Rating</button>
+      {/* Logout Button */}
+      <button onClick={handleLogout} className="logout-btn">Logout</button>
 
-      <button onClick={handleLogout} style={{ backgroundColor: 'red', marginLeft: '20px' }}>Logout</button>
-
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie._id}>{movie.name} - {movie.rating}</li>
+      <div className="movie-grid">
+        {movies.map((movie, index) => (
+          <div
+            key={index}
+            className="movie-item"
+            onClick={() => handleMovieClick(movie)}
+          >
+            <img className="movie-poster" src={movie.image} alt={movie.name} />
+            <div className="movie-info">
+              <h3>{movie.name}</h3>
+              <p>IMDb: {movie.imdbRating}</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      {/* Movie Modal */}
+      {selectedMovie && (
+        <div className="movie-modal">
+          <div className="modal-content">
+            <button onClick={closeModal} className="close-btn">Close</button>
+            <h2>{selectedMovie.name}</h2>
+            <iframe
+              src={selectedMovie.trailerUrl}
+              title="Movie Trailer"
+              width="100%"
+              height="400px"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+            <p><strong>Description:</strong> {selectedMovie.description}</p>
+            <p><strong>Characters:</strong> {selectedMovie.characters.join(", ")}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Dashboard;

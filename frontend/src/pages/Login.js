@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import './Login.css'; // 👈 Import the new CSS
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -11,24 +12,37 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-      if (response.data.message === "Login successful") {
-        localStorage.setItem('isLoggedIn', 'true'); // Save login status
-        toast.success("Login Successful!");
-        navigate('/dashboard');
-      }
+      await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      toast.success("Login Successful!");
+      navigate('/dashboard');
     } catch (err) {
       toast.error("Login Failed!");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} required />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Login</button>
-    </form>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2 className="login-title">Login</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          className="login-input"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="login-input"
+        />
+        <button type="submit" className="login-button">Login</button>
+      </form>
+    </div>
   );
 }
 

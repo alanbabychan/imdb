@@ -1,0 +1,56 @@
+/* Signup.css */
+
+.signup-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #141414; /* Dark background like Netflix */
+  }
+  
+  .signup-form {
+    background-color: rgba(0, 0, 0, 0.75); /* Slight transparency */
+    padding: 40px;
+    border-radius: 8px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .signup-title {
+    color: white;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .signup-input {
+    background-color: #333;
+    border: none;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .signup-input::placeholder {
+    color: #aaa;
+  }
+  
+  .signup-button {
+    background-color: #e50914;
+    border: none;
+    padding: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .signup-button:hover {
+    background-color: #f40612;
+  }
+  
